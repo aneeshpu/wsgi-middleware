@@ -15,7 +15,9 @@ class AllCaps:
         self.app = app
 
     def __call__(self, env, start_response):
-        return self.app(env, start_response)
+        resp =  self.app(env, start_response)
+        resp = [r.upper() for r in resp]
+        return resp
 
 all_caps_middleware = AllCaps(app)
 httpd = make_server("localhost", 8000, all_caps_middleware)
