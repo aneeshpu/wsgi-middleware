@@ -1,5 +1,20 @@
 from wsgiref.simple_server import make_server
 
+def makeapp(f):
+    def wrapped_func(env, start_response):
+        status = '200 OK'
+        response_headers = [('Content-Type', 'text/plain')]
+        start_response(status, response_headers)
+
+        return f()
+
+    return wrapped_func
+
+
+@makeapp
+def func():
+    return ["Hello func"]
+
 def app(env, start_response):
     status = '200 OK'
     response_headers = [('Content-Type', 'text/plain')]
@@ -20,5 +35,5 @@ class AllCaps:
         return resp
 
 all_caps_middleware = AllCaps(app)
-httpd = make_server("localhost", 8000, all_caps_middleware)
+httpd = make_server("localhost", 8000, func)
 httpd.serve_forever()
