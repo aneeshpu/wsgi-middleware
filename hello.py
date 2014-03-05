@@ -3,7 +3,7 @@ from wsgiref.simple_server import make_server
 def makeapp(f):
     def wrapped_func(env, start_response):
         status = '200 OK'
-        response_headers = [('Content-Type', 'text/plain')]
+        response_headers = [('Content-Type', 'text/plain'), ('random-nonsense', 'yeah works')]
         start_response(status, response_headers)
 
         return f()
@@ -34,6 +34,5 @@ class AllCaps:
         resp = [r.upper() for r in resp]
         return resp
 
-all_caps_middleware = AllCaps(app)
 httpd = make_server("localhost", 8000, func)
 httpd.serve_forever()
