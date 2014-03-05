@@ -1,4 +1,6 @@
 from wsgiref.simple_server import make_server
+from webob.dec import wsgify
+import webob
 
 def makeapp(f):
     def wrapped_func(env, start_response):
@@ -11,9 +13,9 @@ def makeapp(f):
     return wrapped_func
 
 
-@makeapp
-def func():
-    return ["Hello func"]
+@wsgify
+def func(req):
+    return webob.Response('wsgified application')
 
 def app(env, start_response):
     status = '200 OK'
